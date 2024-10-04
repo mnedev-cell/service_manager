@@ -26,7 +26,7 @@ git push -u origin main
 # Copy and save this script to use in your project
 
 ```shell
-  import socket
+import socket
 import requests
 import time
 import datetime
@@ -38,6 +38,10 @@ config = {
     "URL_ping": "http://ping.logitec.ma/ping_srv/RPI/SDC/",
     "Position": socket.gethostname()  # Example position
 }
+TIME_PING_PY = 5  # Intervalle entre chaque ping en secondes
+LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
+
+continue_reading = True  # Flag pour arrêter le service si nécessaire
 ```
 
 ## Create a Systemd Service File:
