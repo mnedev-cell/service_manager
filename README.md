@@ -24,7 +24,9 @@ git push -u origin main
 - Add the Following code:
 # Python script for periodic ping service
 # Copy and save this script to use in your project
-import socket
+
+```shell
+  import socket
 import requests
 import time
 import datetime
@@ -36,8 +38,6 @@ config = {
     "URL_ping": "http://ping.logitec.ma/ping_srv/RPI/SDC/",
     "Position": socket.gethostname()  # Example position
 }
-```shell
-
 ```
 
 ## Create a Systemd Service File:
