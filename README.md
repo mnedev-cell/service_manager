@@ -47,6 +47,41 @@ def change_Datetime_format(date_time):
     backData = date_time[0:4] + "-" + date_time[4:6] + "-" + date_time[6:8] + " " + date_time[8:10] + ":" + date_time[10:12] + ":" + date_time[12:14]
     return backData
 
+def Send_last_passage(last_passage):
+    global continue_reading
+    try:
+        URL = config["URL_ping"] + config["Position"]
+        print("URL:", URL)
+
+        my_req = requests.get(URL, verify=False, timeout=5)
+
+        if my_req.status_code != 200:
+            print("Ping YAPO : Echec, code:", my_req.status_code)
+        else:
+            rep = my_req.text
+            print("Date dernier passage depuis Web Service: [", change_Datetime_format(last_passage), "]")
+
+            if not rep.startswith("<html"):
+                if my_req.text:
+                    print("Ping YAPO :", my_req.text[:3], change_Datetime_format(my_req.text[3:]))
+                else:
+                    print("Ping YAPO : Réponse vide")
+
+                if my_req.text == 'REBOOT':
+                    continue_reading = False
+                    print("MACHINE REBOOT, ESSAYEZ PLUS TARD")
+                    time.sleep(1)
+                    os.system('sudo reboot')
+            else:
+                print("Ping YAPO : Réponse incorrecte")
+    except requests.exceptions.ConnectionError:
+        print("Ping YAPO : Error Connecting", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    except requests.exceptions.Timeout as errt:
+        print("Ping YAPO : Timeout Error:", errt)
+    except Exception as e:
+        print("Ping YAPO : Exception:", e)
+
+
 ```
 
 ## Create a Systemd Service File:
