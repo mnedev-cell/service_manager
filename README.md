@@ -22,7 +22,7 @@ git push -u origin main
   sudo nano /usr/local/bin/ping_service.py
 ```
 - Add the Following code: 
-  ```
+  ```shell
 import socket
 import requests
 import time
