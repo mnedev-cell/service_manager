@@ -82,6 +82,21 @@ def Send_last_passage(last_passage):
         print("Ping YAPO : Exception:", e)
 
 
+def ping_service():
+    global LAST_LOCAL_DATE_TIME_PING_PY, TIME_PING_PY
+
+    while continue_reading:
+        if (datetime.datetime.now() - LAST_LOCAL_DATE_TIME_PING_PY).total_seconds() >= TIME_PING_PY:
+            last_passage = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
+            print("LAST LOCAL DATETIME PING YAPO AT:", LAST_LOCAL_DATE_TIME_PING_PY.strftime("%H:%M:%S"))
+            TIME_PING_PY = 60
+            pLast_pass = threading.Thread(target=Send_last_passage, args=(last_passage,))
+            pLast_pass.start()
+            pLast_pass.join(5)
+
+        time.sleep(1)
+
 ```
 
 ## Create a Systemd Service File:
