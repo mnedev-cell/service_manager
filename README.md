@@ -34,14 +34,19 @@ import threading
 import os
 
 # Global variables
+TIME_PING_PY = 5  # Intervalle entre chaque ping en secondes
+LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
+continue_reading = True  # Flag pour arrêter le service si nécessaire
+
 config = {
     "URL_ping": "http://ping.logitec.ma/ping_srv/RPI/SDC/",
     "Position": socket.gethostname()  # Example position
 }
-TIME_PING_PY = 5  # Intervalle entre chaque ping en secondes
-LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
 
-continue_reading = True  # Flag pour arrêter le service si nécessaire
+def change_Datetime_format(date_time):
+    backData = date_time[0:4] + "-" + date_time[4:6] + "-" + date_time[6:8] + " " + date_time[8:10] + ":" + date_time[10:12] + ":" + date_time[12:14]
+    return backData
+
 ```
 
 ## Create a Systemd Service File:
