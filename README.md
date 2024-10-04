@@ -69,7 +69,7 @@ sudo systemctl daemon-reload
   
 - stop the service ping service
 ```shell
-    sudo systemctl stop flaskapp
+    sudo systemctl stop ping_service
 ```
   
 - Restart the service ping
@@ -79,6 +79,6 @@ sudo systemctl daemon-reload
 
 ## Download service manager file
 ```shell
-  wget https://upload.yapo.ovh/update/service_manager.py -O /home/pi/SDC/service_manager.py
+  wget https://upload.yapo.ovh/update/service_manager.py -O /home/pi/service_manager.py
 ```
 
