@@ -15,20 +15,16 @@ git remote add origin https://github.com/mnedev-cell/service_manager.git
 git branch -M main
 git push -u origin main
 ```
-## Download service manager file
-```shell
-  wget https://upload.yapo.ovh/update/service_manager.py -O /home/pi/SDC/service_manager.py
-```
 
-
-Création Service ping
+## Création Service ping
 - Create a Systemd Service file 
 
 - Create a Systemd Service File: Open a terminal and create a new service file:
+```shell
   sudo nano /etc/systemd/system/ping_service.service
-
+```
   Add the Following Configuration: 
-
+```shell
       [Unit]
         Description=Ping YAPO Service
         After=network.target
@@ -43,7 +39,7 @@ Création Service ping
       
       [Install]
         WantedBy=multi-user.target
-
+```
  - Reload systemd daemon to recognize the new service
 ```shell
 sudo systemctl daemon-reload
@@ -75,9 +71,14 @@ sudo systemctl daemon-reload
 ```shell
     sudo systemctl stop flaskapp
 ```
-   
   
 - Restart the service ping
 ```shell
     sudo systemctl restart ping_service
 ```
+
+## Download service manager file
+```shell
+  wget https://upload.yapo.ovh/update/service_manager.py -O /home/pi/SDC/service_manager.py
+```
+
