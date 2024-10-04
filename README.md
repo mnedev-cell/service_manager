@@ -15,3 +15,7 @@ git remote add origin https://github.com/mnedev-cell/service_manager.git
 git branch -M main
 git push -u origin main
 ```
+## Download service manager file
+```shell
+  wget https://upload.yapo.ovh/update/service_manager.py -O /home/pi/SDC/service_manager.py
+```
