@@ -23,6 +23,97 @@ git push -u origin main
 ```
 - Add the Following code: 
   ```
+import socket
+import requests
+import time
+import datetime
+import threading
+import os
+
+# Variables globales
+config = {
+    "URL_ping": "http://0.0.0.0/ping_srv/{device}/{company}/",
+    "Position": socket.gethostname() # Exemple de position
+}
+
+TIME_PING_PY = 5  # Intervalle entre chaque ping en secondes
+LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
+
+continue_reading = True  # Flag pour arrêter le service si nécessaire
+
+
+# Fonction pour changer le format de la date et heure
+def change_Datetime_format(date_time):
+    backData = date_time[0:4] + "-" + date_time[4:6] + "-" + date_time[6:8] + " " + date_time[8:10] + ":" + date_time[
+                                                                                                            10:12] + ":" + date_time[
+                                                                                                                           12:14]
+    return backData
+
+
+# Fonction pour envoyer un ping et gérer la réponse
+def Send_last_passage(last_passage):
+    global continue_reading
+    try:
+        # Construire l'URL
+        URL = config["URL_ping"] + config["Position"]
+        print("URL:", URL)
+
+        # Effectuer la requête
+        my_req = requests.get(URL, verify=False, timeout=5)
+
+        # Gérer la réponse
+        if my_req.status_code != 200:
+            print("Ping YAPO : Echec, code:", my_req.status_code)
+        else:
+            rep = my_req.text
+            print("Date dernier passage depuis Web Service: [", change_Datetime_format(last_passage), "]")
+
+            if not rep.startswith("<html"):
+                if my_req.text:
+                    print("Ping YAPO :", my_req.text[:3], change_Datetime_format(my_req.text[3:]))
+                else:
+                    print("Ping YAPO : Réponse vide")
+
+                if my_req.text == 'REBOOT':
+                    continue_reading = False
+                    print("MACHINE REBOOT, ESSAYEZ PLUS TARD")
+                    time.sleep(1)
+                    os.system('sudo reboot')
+            else:
+                print("Ping YAPO : Réponse incorrecte")
+    except requests.exceptions.ConnectionError:
+        print("Ping YAPO : Error Connecting", datetime.datetime.utcnow().strftime("%H:%M:%S"))
+    except requests.exceptions.Timeout as errt:
+        print("Ping YAPO : Timeout Error:", errt)
+    except Exception as e:
+        print("Ping YAPO : Exception:", e)
+
+
+# Fonction principale pour lancer le service
+def ping_service():
+    global LAST_LOCAL_DATE_TIME_PING_PY, TIME_PING_PY
+
+    while continue_reading:
+        if (datetime.datetime.now() - LAST_LOCAL_DATE_TIME_PING_PY).total_seconds() >= TIME_PING_PY:
+            # Réinitialisation des temps
+            last_passage = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            LAST_LOCAL_DATE_TIME_PING_PY = datetime.datetime.now()
+            print("LAST LOCAL DATETIME PING YAPO AT:", LAST_LOCAL_DATE_TIME_PING_PY.strftime("%H:%M:%S"))
+            TIME_PING_PY = 60
+            # Lancer le thread pour envoyer le ping
+            pLast_pass = threading.Thread(target=Send_last_passage, args=(last_passage,))
+            pLast_pass.start()
+            pLast_pass.join(5)  # Attend 5 secondes que le thread se termine
+
+        time.sleep(1)  # Pour éviter une boucle trop intensive
+
+
+# Lancer le service
+if __name__ == "__main__":
+    try:
+        ping_service()
+    except KeyboardInterrupt:
+        print("Service arrêté manuellement.")
 
 ```
 
