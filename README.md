@@ -97,6 +97,14 @@ def ping_service():
 
         time.sleep(1)
 
+if __name__ == "__main__":
+    try:
+        ping_service()
+    except KeyboardInterrupt:
+        print("Service arrêté manuellement.")
+
+FIN
+
 ```
 
 ## Create a Systemd Service File:
