@@ -103,7 +103,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Service arrêté manuellement.")
 
-FIN
+
 
 ```
 
