@@ -17,9 +17,17 @@ git push -u origin main
 ```
 
 ## Création Service ping
-- Create a Systemd Service file 
+- Create file ping_service.py  
+```shell
+  sudo nano /usr/local/bin/ping_service.py
+```
+- Add the Following code: 
+  ```
 
-- Create a Systemd Service File: Open a terminal and create a new service file:
+```
+
+## Create a Systemd Service File:
+- Open a terminal and create a new service file:
 ```shell
   sudo nano /etc/systemd/system/ping_service.service
 ```
